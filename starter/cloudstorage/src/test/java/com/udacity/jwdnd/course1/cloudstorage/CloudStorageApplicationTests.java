@@ -21,6 +21,8 @@ class CloudStorageApplicationTests {
 
 	private WebDriver driver;
 
+	public String baseURL;
+
 	@BeforeAll
 	static void beforeAll() {
 		WebDriverManager.chromedriver().setup();
@@ -29,6 +31,7 @@ class CloudStorageApplicationTests {
 	@BeforeEach
 	public void beforeEach() {
 		this.driver = new ChromeDriver();
+		baseURL = "http://localhost:" + port;
 	}
 
 	@AfterEach
@@ -200,6 +203,55 @@ class CloudStorageApplicationTests {
 
 	}
 
+	@Test
+	public void testUserSignupLogin_HappyPath() {
+		String username = "joe";
+		String password = "1234";
 
+		driver.get(baseURL + "/signup");
+
+		SignupPage signupPage = new SignupPage(driver);
+		signupPage.signup("Joe", "Chen", username, password);
+
+		driver.get(baseURL + "/login");
+
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login(username, password);
+
+		/*try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}*/
+
+		Assertions.assertEquals("http://localhost:" + this.port + "/home", driver.getCurrentUrl());
+
+	}
+
+	@Test
+	public void testUserSignupLogin_WrongPass() {
+		String username = "joe";
+		String password = "1234";
+
+		driver.get(baseURL + "/signup");
+
+		SignupPage signupPage = new SignupPage(driver);
+		signupPage.signup("Joe", "Chen", username, password);
+
+		driver.get(baseURL + "/login");
+
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login(username, password + "0");
+
+		/*try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}*/
+
+		Assertions.assertEquals("http://localhost:" + this.port + "/login?error", driver.getCurrentUrl());
+		Assertions.assertTrue(driver.findElement(By.id("error-msg")).getText().contains("Invalid username or password"));
+
+	}
 
 }
