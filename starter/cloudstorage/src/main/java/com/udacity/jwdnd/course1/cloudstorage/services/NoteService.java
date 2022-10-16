@@ -15,7 +15,7 @@ public class NoteService {
     }
 
     public int insert(Note note) {
-        System.out.println("userId: " + note.getUserId());
+        //System.out.println("userId: " + note.getUserId());
         return this.noteMapper.insert(note);
     }
 
@@ -25,7 +25,7 @@ public class NoteService {
 
     public List<Note> findNotesByUserId(Integer userid) {
         List<Note> notes = this.noteMapper.findByUserId(userid);
-        System.out.println("notes.size() " + notes.size());
+        //System.out.println("notes.size() " + notes.size());
         return notes;
     }
 

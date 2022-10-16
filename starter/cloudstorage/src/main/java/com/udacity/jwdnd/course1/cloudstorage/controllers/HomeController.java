@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/home")
 public class HomeController {
 
     private UserService userService;
@@ -30,7 +29,7 @@ public class HomeController {
         this.encryptionService = encryptionService;
     }
 
-    @GetMapping
+    @GetMapping("/home")
     public String getHomePage(Authentication auth, Model model) {
         User user = userService.getUser(auth.getName());
         if (user == null) return "redirect:/login";
@@ -46,5 +45,13 @@ public class HomeController {
 
         return "home";
     }
+
+    @GetMapping("")
+    public String hello(Authentication auth, Model model) {
+        User user = userService.getUser(auth.getName());
+        if (user == null) return "redirect:/login";
+        return "home";
+    }
+
 }
 

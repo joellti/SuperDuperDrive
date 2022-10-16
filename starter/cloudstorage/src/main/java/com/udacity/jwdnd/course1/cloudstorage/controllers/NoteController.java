@@ -43,11 +43,11 @@ public class NoteController {
     public String deleteNote(@RequestParam("noteid") Integer noteId, Authentication authentication) {
         String username = authentication.getName();
         Integer userId = userService.getUser(username).getUserId();
-        System.out.println(userId);
+        //System.out.println(userId);
 
-        System.out.println(noteId);
+        //System.out.println(noteId);
         Note note = noteService.findNoteByNoteId(noteId);
-        System.out.println(note.getUserId());
+        //System.out.println(note.getUserId());
         if (note == null || userId != note.getUserId()) return "redirect:/result?other";
 
         noteService.deleteNoteByNoteId(noteId);

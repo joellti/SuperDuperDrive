@@ -16,7 +16,7 @@ public class CredentialService {
     }
 
     public int insert(Credential credential) {
-        System.out.println("userId: " + credential.getUserId());
+        //System.out.println("userId: " + credential.getUserId());
         return this.credentialMapper.insert(credential);
     }
 
@@ -26,7 +26,7 @@ public class CredentialService {
 
     public List<Credential> findCredentialsByUserId(Integer userId) {
         List<Credential> credentials = this.credentialMapper.findByUserId(userId);
-        System.out.println("credentials.size() " + credentials.size());
+        //System.out.println("credentials.size() " + credentials.size());
         return credentials;
     }
 

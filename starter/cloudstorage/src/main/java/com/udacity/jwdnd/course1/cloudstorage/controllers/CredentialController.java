@@ -8,9 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.SecureRandom;
 import java.util.Random;
-import java.nio.charset.Charset;
+
 
 @Controller
 @RequestMapping
@@ -32,9 +31,16 @@ public class CredentialController {
         credentialToUpdate.setUserId(userId);
 
         if (credentialToUpdate.getCredentialid() == null) {
-            byte[] array = new byte[16]; // length is bounded by 16
-            new Random().nextBytes(array);
-            String generatedString = new String(array, Charset.forName("UTF-8"));
+            int leftLimit = 48; // numeral '0'
+            int rightLimit = 122; // letter 'z'
+            int targetStringLength = 16;
+            Random random = new Random();
+
+            String generatedString = random.ints(leftLimit, rightLimit + 1)
+                    .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                    .limit(targetStringLength)
+                    .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                    .toString();
 
             credentialToUpdate.setKey(generatedString);
             String password = credentialToUpdate.getPassword();
@@ -55,11 +61,11 @@ public class CredentialController {
     public String deleteNote(@RequestParam("credentialId") Integer credentialId, Authentication authentication) {
         String username = authentication.getName();
         Integer userId = userService.getUser(username).getUserId();
-        System.out.println(userId);
+        //System.out.println(userId);
 
-        System.out.println(credentialId);
+        //System.out.println(credentialId);
         Credential credential = credentialService.findCredentialByCredentialId(credentialId);
-        System.out.println(credential.getUserId());
+        //System.out.println(credential.getUserId());
         if (credential == null || userId != credential.getUserId()) return "redirect:/result?other";
 
         credentialService.deleteCredentialByCredentialId(credentialId);
