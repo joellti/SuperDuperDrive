@@ -50,7 +50,8 @@ public class HomeController {
     public String hello(Authentication auth, Model model) {
         User user = userService.getUser(auth.getName());
         if (user == null) return "redirect:/login";
-        return "home";
+        model.addAttribute("randomPath", true);
+        return "result";
     }
 
 }

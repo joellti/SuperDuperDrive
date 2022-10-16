@@ -23,6 +23,16 @@
                 <span>Your changes were not saved due to unknown reason</span>
                 <span>Click <a th:href="@{/home}">here</a> to continue.</span>
             </div>
+            <div class="alert alert-danger fill-parent" th:if="${maxUploadSizeExceeded}">
+                <h1 class="display-5">Error</h1>
+                <span>Max Upload Size Exceeded!!!</span>
+                <span>Click <a th:href="@{/home}">here</a> to continue.</span>
+            </div>
+            <div class="alert alert-danger fill-parent" th:if="${randomPath}">
+                <h1 class="display-5">Error</h1>
+                <span>You entered an invalid URL</span>
+                <span>Click <a th:href="@{/home}">here</a> to continue.</span>
+            </div>
         </div>
     </body>
 </html>
