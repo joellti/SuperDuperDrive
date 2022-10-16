@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.Random;
 
 
@@ -31,18 +33,13 @@ public class CredentialController {
         credentialToUpdate.setUserId(userId);
 
         if (credentialToUpdate.getCredentialid() == null) {
-            int leftLimit = 48; // numeral '0'
-            int rightLimit = 122; // letter 'z'
-            int targetStringLength = 16;
-            Random random = new Random();
 
-            String generatedString = random.ints(leftLimit, rightLimit + 1)
-                    .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-                    .limit(targetStringLength)
-                    .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                    .toString();
+            SecureRandom random = new SecureRandom();
+            byte[] key = new byte[16];
+            random.nextBytes(key);
+            String encodedKey = Base64.getEncoder().encodeToString(key);
 
-            credentialToUpdate.setKey(generatedString);
+            credentialToUpdate.setKey(encodedKey);
             String password = credentialToUpdate.getPassword();
             credentialToUpdate.setPassword(encryptionService.encryptValue(password, credentialToUpdate.getKey()));
             credentialService.insert(credentialToUpdate);
